@@ -1249,7 +1249,7 @@ def test_enter_positions(
 def test_exit_positions(mocker, default_conf_usdt, limit_order, is_short, caplog) -> None:
     freqtrade = get_patched_freqtradebot(mocker, default_conf_usdt)
 
-    mocker.patch("freqtrade.freqtradebot.FreqtradeBot.handle_trade", MagicMock(return_value=True))
+    mocker.patch("freqtrade.freqtradebot.FreqtradeBot.handle_trade", MagicMock(return_value=False))
     mocker.patch(f"{EXMS}.fetch_order", return_value=limit_order[entry_side(is_short)])
     mocker.patch(f"{EXMS}.get_trades_for_order", return_value=[])
 
@@ -1321,6 +1321,7 @@ def test_exit_positions_exception(mocker, default_conf_usdt, limit_order, caplog
             ft_price=trade.open_rate,
             order_id=order_id,
             ft_is_open=False,
+            filled=11,
         )
     )
     Trade.session.add(trade)
